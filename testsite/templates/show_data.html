@@ -1,0 +1,195 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+数据预览
+{% endblock %}
+
+{% block script %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/extension/dataTool.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
+<script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+
+{% endblock %}
+
+{% block style %}
+<style>
+    div.chart{display: inline-block}
+</style>
+{% endblock %}
+
+{% block content%}
+<div class="container">
+
+    <ul class="nav nav-tabs" id="data_tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" href="#raw_data">数据预览</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#data_statistics">数据统计</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#">数据。。</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#">数据。。</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="data_tab_content">
+        <div class="tab-pane fade show active" id="raw_data" role="tabpanel" aria-labelledby="raw_data_tab">
+            <table class="table table-sm table-bordered table-hover table-responsive" style="height: 600px">
+                <thead>
+                    <tr>
+                        {% for fn in features %}
+                        <th>{{ fn }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in materials %}
+                        {% if forloop.counter0 in LOFOutliers or forloop.counter0 in IFOutliers %}
+                        <tr class="table-warning">
+                            {% for key, val in data.items %}
+                                {% if forloop.counter0 > 3 %}
+                                    <td>{{ val | floatformat:"5" }}</td>
+                                {% else %}
+                                    <td>{{ val }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% else %}
+                        <tr>
+                            {% for key, val in data.items %}
+                                {% if forloop.counter0 > 3 %}
+                                    <td>{{ val | floatformat:"5" }}</td>
+                                {% else %}
+                                    <td>{{ val }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button class="form-control" type="submit">确认</button>
+        </div>
+        <div class="tab-pane fade" id="data_statistics" role="tabpanel" aria-labelledby="data_statics_tab">
+            <table class="table table-striped table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th>Statistic Type</th>
+                        <th>ranion</th>
+                        <th>v[LiACE2]</th>
+                        <th>BNintra</th>
+                        <th>BNinter</th>
+                        <th>SconfA</th>
+                        <th>SconfC</th>
+                        <th>Ea(eV)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Average</td>
+                        {% for key, value in averages.items %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Maximum</td>
+                        {% for key, value in maximums.items %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Minimum</td>
+                        {% for key, value in minimums.items %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>1st quartile</td>
+                        {% for key, value in 1st_quartiles.items %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>2nd quartile</td>
+                        {% for key, value in 2nd_quartiles.items %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>3rd quartile</td>
+                        {% for key, value in 3rd_quartiles.items %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Deviation Var</td>
+                        {% for key, value in deviation_var.items %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Standard Deviation</td>
+                        {% for key, value in deviation_std.items %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" role="tabpanel" aria-labelledby="">
+
+        </div>
+        <div class="tab-pane fade" role="tabpanel" aria-labelledby="">
+
+        </div>
+
+    </div>
+
+
+<!--    <h2 align="center">数据预览</h2>-->
+
+<!--    <table class="table table-striped table-bordered table-hover table-responsive">-->
+<!--        <thead>-->
+<!--            <tr>-->
+<!--                {% for fn in feature_name %}-->
+<!--                <th>{{ fn }}</th>-->
+<!--                {% endfor %}-->
+<!--            </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--            {% for data in materials_data %}-->
+<!--            <tr>-->
+<!--                <td>{{ data.number }}</td>-->
+<!--                <td>{{ data.formula }}</td>-->
+<!--                <td>{{ data.material_id }}</td>-->
+<!--                <td>{{ data.chemical_compound }}</td>-->
+<!--                <td>{{ data.ranion }}</td>-->
+<!--                <td>{{ data.v_liace2 }}</td>-->
+<!--                <td>{{ data.bnintra }}</td>-->
+<!--                <td>{{ data.bninter }}</td>-->
+<!--                <td>{{ data.sconfa }}</td>-->
+<!--                <td>{{ data.sconfc }}</td>-->
+<!--                <td>{{ data.ea_ev }}</td>-->
+<!--&lt;!&ndash;                {% for d in data %}&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{ d }}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                {% endfor %}&ndash;&gt;-->
+<!--            </tr>-->
+<!--            {% endfor %}-->
+<!--        </tbody>-->
+<!--    </table>-->
+
+</div>
+<script>
+    $('#data_tabs a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+
+</script>
+
+{% endblock %}

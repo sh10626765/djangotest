@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="{% trans "固态电解质高通量筛选平台" %}">
+    <meta name="description" content="{% trans "固态电解质高通量筛选平台" %}">
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    {% block link %}{% endblock %}
+</head>
+<body>
+<div class="jumbotron bg-info jumbotron-fluid" style="margin-bottom:0">
+<h2 class="text-white">{% trans "固态电解质高通量筛选平台" %}</h2>
+</div>
+<script type="text/javascript">
+    window.onscroll = function(){
+        var backtop = document.documentElement.scrollTop;
+        if(backtop >= 100){
+            $('a.back-to-top').show();
+        }
+        else{
+            $('a.back-to-top').hide();
+        }
+    }
+</script>
+<nav class="navbar bg-light  navbar-dark" role="navigation">
+    <a class="navbar-brand" href="{% url 'search' %}"><p style="font-size:24px;color:black">{% trans "主页" %}</p></a>
+    <ul class="nav ">
+        <li class="nav-item ">
+            <form name="set_language" id="set_language" method="post"> {% csrf_token %}
+                <select class="form-control" id="language" name="language" style="height:38px" onchange="change_language(this)">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for lang in languages %}
+                    <option value="{{ lang.code }}"{% if lang.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                        {{ lang.name_local }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+            <script>
+            function change_language(obj) {
+                myform = document.getElementById('set_language');
+                myform.method = "POST";
+                myform.action = "{% url 'set_language' %}";
+                myform.submit();
+            }
+            </script>
+        </li>
+        <!-- <li class="nav-item "> -->
+            <!-- <a class="nav-link ">{% trans "访问量：" %}{{count}}</a> -->
+        <!-- </li> -->
+        <li class="nav-item ">
+           <a class="nav-link" href="{% url 'search' %}" style="color:black">{% trans "查询" %}</a>
+        </li>
+        {% if request.user.is_authenticated %}
+         <li class="nav-item dropdown"  >
+            <a class="nav-link dropdown-toggle" style="color:black" href="#"  data-toggle="dropdown">
+                {% trans "计算" %}
+            </a>
+            <div class="dropdown-menu">
+<!--          <a class="dropdown-item" href="{% url 'upload' %}" style="color:black">{% trans "文献上传" %}</a> -->
+                <a  class="dropdown-item" href="{% url 'upload_cifs' %}" style="color:black">{% trans "计算数据上传" %}</a>
+                <a class="dropdown-item" href="{% url 'taskdisplay' %}" style="color:black">{% trans "计算任务提交" %}</a>
+                <a class="dropdown-item" href="{% url 'taskorderlistdisplay' %}" style="color:black">{% trans "计算任务查询" %}</a>
+<!--         <a  class="dropdown-item" href="{% url 'cifupload0' %}" style="color:black">{% trans "CIF上传" %}</a>#}-->
+            </div>
+        </li>
+            {% if isadmin %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'admin' %}" style="color:black">{% trans "用户管理" %}</a></li>
+            {% endif %}
+            <li class="nav-item dropdown" >
+            <a class="nav-link dropdown-toggle" style="color:black" href="#" data-toggle="dropdown">
+            {{request.user.username}}
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'account_profile' %}">{% trans "账户信息" %}</a>
+                <a class="dropdown-item"  href="{% url 'account_reset_password' %}">{% trans "密码重置" %}</a>
+                <a class="dropdown-item" href="{% url 'account_change_password' %}">{% trans "密码修改" %}</a>
+                <a class="dropdown-item" href="{% url 'account_email' %}">{% trans "Email修改" %}</a>
+                <a class="dropdown-item" href="{% url 'account_logout' %}">{% trans "退出" %}</a>
+            </div>
+            </li>
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{%url 'account_signup'%}" style="color:black">{% trans "注册" %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{%url 'account_login'%}" style="color:black">{% trans "登录" %}</a></li>
+        {% endif %}
+        <li class="nav-item dropdown" >
+            <a class="nav-link dropdown-toggle" style="color:black" href="#" data-toggle="dropdown">
+            {% trans "关于" %}
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% static '/help/SPSE-UserManuals.pdf' %}" style="color:black" target="_blank">{% trans "帮助" %}</a>
+                <a class="dropdown-item"  href="{% url 'links' %}">{% trans "友情链接" %}</a>
+            </div>
+        </li>
+     </ul>
+</nav>
+
+{% block content %} 
+{% endblock %}
+{#<nav class="navbar navbar-expand-sm fixed-bottom" style="background-color:#ecf0f1">#}
+    <div class="jumbotron bg-info" id="foot" style="width:100%; height:150px;padding-top:20px;margin-top:10px;clear:both;bottom:0;">
+        <div class="row">
+            <div class="col-auto offset-3">
+                <p class="text-white" style="font-size:14px;margin:auto;text-align:center">
+                    <br>
+                    {% trans "固态电解质高通量筛选平台, 邮编：200444, 邮箱：webmaster@bmaterials.cn" %}
+                    <br>
+                    {% ifequal LANGUAGE_CODE "zh-hans" %}
+                        沪ICP备19020195号-1 
+                        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011302004954" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+                        <img src="{% static '/beian/beianicon.png' %}" style="float:left;"/>
+                        沪公网安备 31011302004954号</a>
+                    <br>
+                    {% endifequal %}
+                </p>
+            </div>
+            <div class="col" align="right">
+                <div align="center">
+                <img src="{% static '/img/QRcode.png' %}" style="height:100px;width:100px;margin:auto;" />
+                <div>
+                <a target="_blank" style="font-size:14px" href="https://jq.qq.com/?_wv=1027&k=52J6sw6">{% trans "官方技术交流QQ群:19277858" %}</a>
+            </div>
+        </div>
+    </div>
+{#</nav>#}
+<a style="position: fixed;bottom: 3em;right: 3em;text-decoration: none;color: #EEEEEE;background-color: rgba(0, 0, 0, 0.3);font-size: 12px;padding: 1em;border-radius: 3px;border: 1px solid #CCCCCC;display: none;" href="#" class="back-to-top">{% trans "回到顶端" %}</a>
+</body>
+</html>

@@ -1,0 +1,150 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+数据预览
+{% endblock %}
+
+{% block content%}
+<div class="container-fluid">
+
+    <ul class="nav nav-tabs" id="data_tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" href="#raw_data">数据预览</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#">数据。。</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#">数据。。</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="data_tab_content">
+        <div class="tab-pane fade show active" id="raw_data" role="tabpanel" aria-labelledby="raw_data_tab">
+            <table class="table table-striped table-bordered table-hover table-responsive edtitable">
+                <thead>
+                    <tr>
+                        {% for fn in feature_name %}
+                        <th>{{ fn }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in materials_data %}
+                    <tr>
+                        {% for key, value in data.items %}
+                            {% if forloop.counter0 == 4 %}
+                                {% if value in outlier_ranion %}
+                                    <td class="table-warning"> {{value}} </td>
+                                {% else %}
+                                    <td> {{value}} </td>
+                                {% endif %}
+                            {% elif forloop.counter0 == 5 %}
+                                {% if value in outlier_v_liace2 %}
+                                    <td class="table-warning"> {{value}} </td>
+                                {% else %}
+                                    <td> {{value}} </td>
+                                {% endif %}
+                            {% elif forloop.counter0 == 6 %}
+                                {% if value in outlier_bnintra %}
+                                    <td class="table-warning"> {{value}} </td>
+                                {% else %}
+                                    <td> {{value}} </td>
+                                {% endif %}
+                            {% elif forloop.counter0 == 7 %}
+                                {% if value in outlier_bninter %}
+                                    <td class="table-warning"> {{value}} </td>
+                                {% else %}
+                                    <td> {{value}} </td>
+                                {% endif %}
+                            {% elif forloop.counter0 == 8 %}
+                                {% if value in outlier_sconfa %}
+                                    <td class="table-warning"> {{value}} </td>
+                                {% else %}
+                                    <td> {{value}} </td>
+                                {% endif %}
+                            {% elif forloop.counter0 == 9 %}
+                                {% if value in outlier_sconfc %}
+                                    <td class="table-warning"> {{value}} </td>
+                                {% else %}
+                                    <td> {{value}} </td>
+                                {% endif %}
+                            {% elif forloop.counter0 == 10 %}
+                                {% if value in outlier_ea_ev %}
+                                    <td class="table-warning"> {{value}} </td>
+                                {% else %}
+                                    <td> {{value}} </td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{ value }}</td>
+                            {% endif %}
+                        {% endfor %}
+
+
+<!--                        <td>{{ data }}</td>-->
+<!--                        <td>{{ data.formula }}</td>-->
+<!--                        <td>{{ data.material_id }}</td>-->
+<!--                        <td>{{ data.chemical_compound }}</td>-->
+<!--                        {% if forloop.counter0 in outlier_ranion %}-->
+<!--                            <td class="table-warning">{{ data.ranion }}</td>-->
+<!--                        {% else %}-->
+<!--                            <td>{{ data.ranion }}</td>-->
+<!--                        {% endif %}-->
+<!--                        {% if forloop.counter0 in outlier_vliace2 %}-->
+<!--                            <td class="table-warning">{{ data }}</td>-->
+<!--                        {% else %}-->
+<!--                            <td>{{ data.v_liace2 }}</td>-->
+<!--                        {% endif %}-->
+<!--                        {% if forloop.counter0 in outlier_bnintra %}-->
+<!--                        <td class="table-warning">{{ data.bnintra }}</td>-->
+<!--                        {% else %}-->
+<!--                        <td>{{ data.bnintra }}</td>-->
+<!--                        {% endif %}-->
+<!--                        {% if forloop.counter0 in outlier_bninter %}-->
+<!--                        <td class="table-warning">{{ data.bninter }}</td>-->
+<!--                        {% else %}-->
+<!--                        <td>{{ data.bninter }}</td>-->
+<!--                        {% endif %}-->
+<!--                        {% if forloop.counter0 in outlier_sconfa %}-->
+<!--                        <td class="table-warning">{{ data.sconfa }}</td>-->
+<!--                        {% else %}-->
+<!--                        <td>{{ data.sconfa }}</td>-->
+<!--                        {% endif %}-->
+<!--                        {% if forloop.counter0 in outlier_sconfc %}-->
+<!--                        <td class="table-warning">{{ data.sconfc }}</td>-->
+<!--                        {% else %}-->
+<!--                        <td>{{ data.sconfc }}</td>-->
+<!--                        {% endif %}-->
+<!--                        {% if forloop.counter0 in outlier_ea_ev %}-->
+<!--                        <td class="table-warning">{{ data.ea_ev }}</td>-->
+<!--                        {% else %}-->
+<!--                        <td>{{ data.ea_ev }}</td>-->
+<!--                        {% endif %}-->
+        <!--                {% for d in data %}-->
+        <!--                <td>{{ d }}</td>-->
+        <!--                {% endfor %}-->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" role="tabpanel" aria-labelledby="">
+
+        </div>
+        <div class="tab-pane fade" role="tabpanel" aria-labelledby="">
+
+        </div>
+
+    </div>
+
+
+</div>
+<script>
+    $('#data_tabs a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+
+</script>
+
+{% endblock %}

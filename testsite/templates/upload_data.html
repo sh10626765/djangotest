@@ -1,0 +1,51 @@
+{% extends "base_index.html" %}
+<!--<!DOCTYPE html>-->
+<!--{% load static %}-->
+<!--<html lang="zh-CN">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Upload</title>-->
+
+<!--    <link rel="stylesheet" href="/static/bootstrap.min.css">-->
+
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+
+<!--    <h2>请根据所给模板提交数据！</h2>-->
+<!--    <a href="">模板下载</a>-->
+<!--    <br>-->
+<!--    <br>-->
+
+<!--<form method="post" enctype="multipart/form-data">-->
+<!--    {% csrf_token %}-->
+<!--    <input class="form-control" type="file" multiple id="input_upload_data" name="input_upload_data">-->
+<!--    <button class="btn btn-default" type="submit" title="提交">提交</button>-->
+<!--</form>-->
+
+<!--</div>-->
+<!--</body>-->
+
+<!--</html>-->
+
+
+
+{% block title %}上传数据{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h2>请根据所给模板提交数据！</h2>
+    <a href="">模板下载</a>
+    <br>
+    <br>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input class="form-control" type="file" multiple id="input_upload_data" name="input_upload_data">
+    <button class="btn btn-default" type="submit" title="提交">提交</button>
+</form>
+
+</div>
+{% endblock %}
